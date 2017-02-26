@@ -5,6 +5,7 @@ module.exports = {
     simple: './lib/js/examples/simple/root.js',
     logo: './lib/js/examples/logo/index.js',
     todomvc: './lib/js/examples/todomvc/app.js',
+    redux: './lib/js/examples/redux/component.js',
     interop: './examples/interop/jsRoot.js',
   },
   output: {

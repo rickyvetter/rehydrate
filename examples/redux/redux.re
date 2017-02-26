@@ -17,3 +17,5 @@ module Store = {
 let compose _ => ();
 
 let combineReducers _ => ();
+
+let bindActionCreators actions dispatch => List.map (fun action () => dispatch action) actions;

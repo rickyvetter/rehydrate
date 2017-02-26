@@ -46,5 +46,24 @@ let combinedReducer state action => {
   | StringAction action => {...state, string: stringReducer state action}
   | CounterAction action => {...state, counter: counterReducer state action}
 };
+
+this pattern gives you full control over the shape of your state.
+|}
+    ];
+
+
+let bindActionCreators:
+  list 'action => ('action => unit) => list (unit => unit)
+
+    [@@ocaml.deprecated
+      {|
+bindActionCreators is not as useful in Reason,
+since action creators are types, not functions.
+The code is implemented as:
+
+let bindActionCreators actions dispatch =>
+  List.map (fun action () => dispatch action) actions;
+
+Instead - you are free to build the action data type at dispatch time.
 |}
     ];

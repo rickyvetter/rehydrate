@@ -42,6 +42,9 @@ module Blah =
     type action = ComplexStore.appActions;
   };
 
+/* this will warn because the api isn't necessary in ocaml */
+/* Redux.compose (); */
+
 ReactDOMRe.render
   <Blah store=ComplexStore.store component=DataRenderer.createElement /> (ReasonJs.Document.getElementById "index");
 

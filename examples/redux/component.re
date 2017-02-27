@@ -1,53 +1,12 @@
-type action =
-  | Increment
-  | Decrement;
+let unsubscribe =
+  Redux.Store.subscribe
+    SimpleStore.store (fun () => Js.log (Redux.Store.getState SimpleStore.store));
 
-type stringAction =
-  | A
-  | B;
+let unsubscribe2 =
+  Redux.Store.subscribe
+    SimpleStore.store (fun () => Js.log "Redux.Store.getState SimpleStore.store");
 
-let counter state action =>
-  switch action {
-  | Increment => state + 1
-  | Decrement => state - 1
-  };
-
-let doubleCounter state action =>
-  switch action {
-  | Increment => state + 2
-  | Decrement => state - 2
-  };
-
-let notACounter state action =>
-  switch action {
-  | Increment => state ^ "a"
-  | Decrement => state ^ "b"
-  };
-
-let stringReduce state action =>
-  switch action {
-  | A => state ^ "a"
-  | B => state ^ "b"
-  };
-
-type appActions =
-  | StringAction stringAction
-  | Action action;
-
-type appState = {counter: int, notACounter: string};
-
-let appReducter state action =>
-  switch action {
-  | StringAction action => {...state, notACounter: stringReduce state.notACounter action}
-  | Action action => {...state, counter: counter state.counter action}
-  };
-
-/* let a = Redux.compose appReducter; */
-let store = Redux.Store.create counter 0;
-
-Redux.Store.subscribe store (fun () => Js.log (Redux.Store.getState store));
-
-let dispatch = Redux.Store.dispatch store;
+let dispatch = Redux.Store.dispatch SimpleStore.store;
 
 dispatch Increment;
 
@@ -57,18 +16,40 @@ dispatch Decrement;
 
 dispatch Increment;
 
-Redux.Store.replaceReducer store doubleCounter;
+Redux.Store.replaceReducer SimpleStore.store SimpleStore.doubleCounter;
 
 /* this won't work because types are different :) */
 /* Redux.Store.replaceReducer store notACounter; */
 dispatch Increment;
 
+unsubscribe ();
+
 dispatch Increment;
 
-let store2 = Redux.Store.create appReducter {counter: 0, notACounter: ""};
+dispatch Increment;
 
-Redux.Store.subscribe store2 (fun () => Js.log (Redux.Store.getState store2));
+dispatch Increment;
 
-Redux.Store.dispatch store2 (StringAction A);
-Redux.Store.dispatch store2 (StringAction B);
-Redux.Store.dispatch store2 (Action Increment);
+dispatch Increment;
+
+dispatch Increment;
+
+dispatch Increment;
+
+module Blah =
+  Redux.MakeProvider {
+    type state = ComplexStore.appState;
+    type action = ComplexStore.appActions;
+  };
+
+ReactDOMRe.render
+  <Blah store=ComplexStore.store component=DataRenderer.createElement /> (ReasonJs.Document.getElementById "index");
+
+Redux.Store.subscribe
+  ComplexStore.store (fun () => Js.log (Redux.Store.getState ComplexStore.store));
+
+Redux.Store.dispatch ComplexStore.store (StringAction A);
+
+Redux.Store.dispatch ComplexStore.store (StringAction B);
+
+Redux.Store.dispatch ComplexStore.store (CounterAction Increment);
